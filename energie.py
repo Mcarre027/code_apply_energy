@@ -8,7 +8,7 @@ from io import BytesIO
 import gdown
 
 
-df2 = pd.read_excel("Rapport exploration des données sujet energie.xlsx")
+
 
 @st.cache_data
 def get_logo():
@@ -71,11 +71,7 @@ if page == pages[1] :
     st.write('<u>**Affichage des valeurs manquantes**</u>',unsafe_allow_html=True)
     if st.checkbox("Afficher les NA") :
       st.dataframe(df.isna().sum())
-    st.markdown("\n\n\n")
-    st.markdown("\n\n\n")
-    st.write('<u>**Affichage des valeurs manquantes**</u>',unsafe_allow_html=True)
-    if st.checkbox("Rapport exploration des données sujet energie") :
-     st.dataframe(df2.head(32))
+    
        
 
 
