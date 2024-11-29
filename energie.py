@@ -18,7 +18,13 @@ def load_data():
 # Charger les données
 df = load_data()
 st.title("Observatoire de la production et consommation électrique en France ")
-st.sidebar.image("image/logo apply.png",width=250)
+
+logo_id = "1ZF4CX_g41jhOjNipe9OhCTB7mnDLn6Ed"
+logo_url = f"https://drive.google.com/uc?id={logo_id}"
+try:
+    st.sidebar.image(logo_url, width=250)
+except Exception:
+    st.sidebar.write("Logo non disponible")
 st.sidebar.title("Sommaire")
 
 pages=["Introduction","Exploration du jeu de données", "Statistiques et indicateurs", "Modélisation"]
