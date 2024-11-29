@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
 from io import BytesIO
+import gdown
 
 # Configuration du logo
 @st.cache_data
@@ -18,10 +19,11 @@ def get_logo():
 @st.cache_data
 def load_data():
     file_id = "1QyqA7mJ68MiKQ7-7p-LTmrRNmRFAl5IJ"
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    url = f"https://drive.google.com/uc?id={file_id}"
     try:
-        response = requests.get(url)
-        return pd.read_csv(BytesIO(response.content), sep=";")
+        output = "eco2mix-regional-cons-def.csv"
+        gdown.download(url, output, quiet=False)
+        return pd.read_csv(output, sep=";")
     except Exception as e:
         st.error("Erreur lors du chargement des données")
         raise e
