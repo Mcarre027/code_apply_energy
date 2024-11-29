@@ -8,7 +8,7 @@ from io import BytesIO
 import gdown
 
 
-df2 = pd.read_excel("image/Rapport exploration des données sujet energie.xlsx")
+df2 = pd.read_excel("Rapport exploration des données sujet energie.xlsx")
 
 @st.cache_data
 def get_logo():
