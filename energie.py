@@ -6,6 +6,24 @@ import seaborn as sns
 import requests
 from io import BytesIO
 import gdown
+import os
+
+@st.cache_data
+def load_excel():
+    try:
+        # Utiliser le chemin relatif car le fichier est dans le même dossier
+        file_path = "Rapport exploration des données sujet energie.xlsx"
+        if os.path.exists(file_path):
+            df_excel = pd.read_excel(file_path)
+            return df_excel
+        else:
+            st.error("Le fichier Excel n'est pas trouvé dans le dossier")
+            return None
+    except Exception as e:
+        st.error(f"Erreur lors du chargement du fichier Excel : {str(e)}")
+        return None
+
+
 
 # Configuration du logo
 @st.cache_data
@@ -69,6 +87,28 @@ if page == pages[1] :
     st.write('<u>**Affichage des valeurs manquantes**</u>',unsafe_allow_html=True)
     if st.checkbox("Afficher les NA") :
      st.dataframe(df.isna().sum())
+     
+    df_excel = load_excel()
+    if df_excel is not None:
+        # Titre
+        st.header("Rapport d'exploration des données")
+        
+        # Affichage du tableau avec des options de mise en forme
+        st.dataframe(
+            df_excel.style.highlight_null(null_color='red'),
+            use_container_width=True,
+            height=400
+        )
+        
+        # Option pour télécharger
+        st.download_button(
+            label="📥 Télécharger le rapport",
+            data=df_excel.to_csv(index=False).encode('utf-8'),
+            file_name="rapport_energie.csv",
+            mime="text/csv"
+        )
+
+        show_excel_data()
 
 
 
