@@ -5,8 +5,18 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-df=pd.read_csv("eco2mix-regional-cons-def.csv", sep = ";")
+@st.cache_data
+def load_data():
+    file_id = "1QyqA7mJ68MiKQ7-7p-LTmrRNmRFAl5IJ"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    try:
+        return pd.read_csv(url, sep=";")
+    except Exception as e:
+        st.error("Erreur lors du chargement des données. Veuillez vérifier l'accès au fichier.")
+        raise e
 
+# Charger les données
+df = load_data()
 st.title("Observatoire de la production et consommation électrique en France ")
 st.sidebar.image("image/logo apply.png",width=250)
 st.sidebar.title("Sommaire")
