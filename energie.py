@@ -3,28 +3,41 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import requests
+from io import BytesIO
 
+# Configuration du logo
+@st.cache_data
+def get_logo():
+    file_id = "1ZF4CX_g41jhOjNipe9OhCTB7mnDLn6Ed"
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    response = requests.get(url)
+    return BytesIO(response.content)
 
+# Chargement des données
 @st.cache_data
 def load_data():
     file_id = "1QyqA7mJ68MiKQ7-7p-LTmrRNmRFAl5IJ"
-    url = f"https://drive.google.com/uc?id={file_id}"
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
     try:
-        return pd.read_csv(url, sep=";")
+        response = requests.get(url)
+        return pd.read_csv(BytesIO(response.content), sep=";")
     except Exception as e:
-        st.error("Erreur lors du chargement des données. Veuillez vérifier l'accès au fichier.")
+        st.error("Erreur lors du chargement des données")
         raise e
 
-# Charger les données
+# Affichage du logo
+try:
+    logo = get_logo()
+    st.sidebar.image(logo, width=250)
+except Exception:
+    st.sidebar.write("Logo non disponible")
+
+# Chargement et utilisation des données
 df = load_data()
 st.title("Observatoire de la production et consommation électrique en France ")
 
-logo_id = "1ZF4CX_g41jhOjNipe9OhCTB7mnDLn6Ed"
-logo_url = f"https://drive.google.com/uc?id={logo_id}"
-try:
-    st.sidebar.image(logo_url, width=250)
-except Exception:
-    st.sidebar.write("Logo non disponible")
+
 st.sidebar.title("Sommaire")
 
 pages=["Introduction","Exploration du jeu de données", "Statistiques et indicateurs", "Modélisation"]
