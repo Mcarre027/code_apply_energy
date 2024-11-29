@@ -6,8 +6,10 @@ import seaborn as sns
 import requests
 from io import BytesIO
 import gdown
-import os
-df2 = pd.read_excel("D:/formation data analyst/Formation data analyst/dossier livrable formation/Dossier de montage/Rapport exploration des données sujet energie.xlsx")
+
+
+df2 = pd.read_excel("image/Rapport exploration des données sujet energie.xlsx")
+
 @st.cache_data
 def get_logo():
     file_id = "1ZF4CX_g41jhOjNipe9OhCTB7mnDLn6Ed"
