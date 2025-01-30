@@ -65,6 +65,19 @@ page=st.sidebar.radio("Aller vers", pages)
 
 if page == pages[0] : 
   st.write("### Introduction")
+  # Paragraphe d'introduction
+  st.write("""
+    Dans le cadre de ce projet d'étude énergétique, nous nous intéressons à la problématique critique de la prévention des blackouts sur le réseau électrique français. 
+    Cette étude s'inscrit dans un contexte plus large de transition énergétique et de gestion des risques liés à l'équilibre du réseau, 
+    particulièrement en période de forte sollicitation ou de conditions météorologiques extrêmes.
+    Notre analyse se concentre particulièrement sur l'exploitation des données historiques de consommation et de production fournies par RTE 
+    (Réseau de Transport d'Électricité), en corrélation avec les données météorologiques. Cette approche vise à identifier les patterns et 
+    facteurs de risque pouvant conduire à des situations de tension sur le réseau électrique.
+    L'anticipation des potentielles ruptures d'approvisionnement représente un enjeu majeur 
+    pour les gestionnaires de réseau, les fournisseurs d'énergie et les consommateurs. 
+    En effet, la capacité à prévoir et prévenir les situations de blackout est cruciale pour maintenir la continuité du service électrique et 
+    garantir la sécurité d'approvisionnement de l'ensemble des usagers. Cette problématique est d'autant plus pertinente dans le contexte actuel de transition énergétique, 
+    où l'intégration croissante d'énergies renouvelables, plus variables par nature, complexifie la gestion de l'équilibre du réseau.""")
  
 
 
@@ -94,10 +107,10 @@ if page == pages[1] :
 if page == pages[2]:
     st.write("### Statistiques et indicateurs")
     # Titre principal
-    st.title("Rapport Matthieu")
+    st.header("Rapport Matthieu")
     
     # Sous-titre
-    st.header("Analyse des dynamiques de production et consommation électrique en France (2014-2022)")
+    st.subheader("Analyse des dynamiques de production et consommation électrique en France (2014-2022)")
     
     # Paragraphe d'introduction
     st.write("""
