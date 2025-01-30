@@ -6,9 +6,7 @@ import seaborn as sns
 import requests
 from io import BytesIO
 import gdown
-
-
-
+import os  # Ajout de l'import manquant
 
 @st.cache_data
 def get_logo():
@@ -17,27 +15,21 @@ def get_logo():
     response = requests.get(url)
     return BytesIO(response.content)
 
-# Chargement des données
 @st.cache_data
 def load_data():
-    # Utiliser le bon ID de fichier
     file_id = "15l7StwyKMtW9dGB-MrnD_hcZtELMCqbz"
     url = f"https://drive.google.com/uc?id={file_id}"
-    
     try:
         output = "eco2mix-regional-cons-def.csv"
-        gdown.download(url, output, quiet=False)
-        df = pd.read_csv(output, sep=";")
+        if not os.path.exists(output):
+            gdown.download(url, output, quiet=False)
+        
+        df = pd.read_csv(output, sep=";", low_memory=False)
         return df
     except Exception as e:
         st.error("Erreur lors du chargement des données")
         st.write(f"Détails de l'erreur : {str(e)}")
         return None
-
-# Utilisation
-df = load_data()
-if df is None:
-    st.stop()
 
 # Affichage du logo
 try:
@@ -46,9 +38,16 @@ try:
 except Exception:
     st.sidebar.write("Logo non disponible")
 
-# Chargement et utilisation des données
+# Chargement des données (une seule fois)
 df = load_data()
-st.title("Observatoire de la production et consommation électrique en France ")
+if df is None:
+    st.stop()
+
+# Titre principal
+st.title("Observatoire de la production et consommation électrique en France")
+
+# Votre code pour les visualisations et analyses ici
+st.write("### Statistiques et indicateurs")
 
 
 st.sidebar.title("Sommaire")
