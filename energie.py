@@ -1,14 +1,19 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 import requests
 from io import BytesIO
-import gdown
+from PIL import Image  # Ajout de l'import manquant pour Image
+from pathlib import Path
 
+# Afficher le répertoire de travail actuel
+current_dir = Path.cwd()
+print(f"Répertoire actuel : {current_dir}")
 
-
+# Lister tous les fichiers dans le répertoire
+print("\nFichiers dans le répertoire :")
+for file in current_dir.glob('*'):
+    print(file.name)
 
 @st.cache_data
 def get_logo():
@@ -18,33 +23,48 @@ def get_logo():
     return BytesIO(response.content)
 
 # Chargement des données
-df = pd.read_csv(r"C:\Users\carre\.vscode\répertoire projets\Projet energie\eco2mix-regional-cons-def.csv", sep=";")
- # Création du DataFrame de comparaison
+current_dir = Path(__file__).parent
+csv_path = current_dir / "eco2mix-regional-cons-def.csv"
+print(f"Le fichier existe : {csv_path.exists()}")
+print(f"Chemin complet : {csv_path}")
 
+# Lecture du CSV
+df = pd.read_csv(csv_path, sep=';')  # Ajout de la lecture du DataFrame
+
+# Création du DataFrame de comparaison
 comparaison = pd.DataFrame({
-        'Production Totale': df['Production_Totale'],
-        'Consommation': df['Consommation (MW)']})
-    
-    # Calcul des moyennes annuelles
-comparaison_annuelle = comparaison.resample('Y').mean()
-# Affichage du logo
-col1, col2, col3 = st.columns([1,2,1])
-with col1:
-    logo = Image.open(r"C:\Users\carre\.vscode\répertoire projets\Projet energie\logo apply.png")
-    st.image(logo, width=200)
+    'Production Totale': df['Production_Totale'],
+    'Consommation': df['Consommation (MW)']
+})
 
+# Pour utiliser resample, il faut d'abord définir un index temporel
+# Assurez-vous d'avoir une colonne de date et définissez-la comme index
+# Par exemple (ajustez le nom de la colonne selon votre CSV) :
+# df['Date'] = pd.to_datetime(df['Date'])
+# comparaison.index = df['Date']
 
+# Calcul des moyennes annuelles
+# comparaison_annuelle = comparaison.resample('Y').mean()
+
+# Interface Streamlit
 st.title("Observatoire de la production et consommation électrique en France ")
 
+# Affichage du logo dans la sidebar
+col1, col2, col3 = st.columns([1,2,1])
+with col1:
+    try:
+        logo = Image.open(Path(current_dir, "logo apply.png"))
+        st.image(logo, width=200)
+    except FileNotFoundError:
+        st.error("Logo non trouvé")
 
+# Sidebar
 st.sidebar.title("Sommaire")
+pages = ["Introduction", "Exploration du jeu de données", "Statistiques et indicateurs", "Modélisation"]
+page = st.sidebar.radio("Aller vers", pages)
 
-pages=["Introduction","Exploration du jeu de données", "Statistiques et indicateurs", "Modélisation"]
-page=st.sidebar.radio("Aller vers", pages)
-
-if page == pages[0] : 
-  st.write("### Introduction")
- 
+if page == pages[0]:
+    st.write("### Introduction")
 
 
 
