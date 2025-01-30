@@ -86,6 +86,24 @@ if page == pages[1] :
 
 if page == pages[2]:
     st.write("### Statistiques et indicateurs")
+    # Titre principal
+    st.title("Rapport Matthieu")
+    
+    # Sous-titre
+    st.header("Analyse des dynamiques de production et consommation électrique en France (2014-2022)")
+    
+    # Paragraphe d'introduction
+    st.write("""
+    Lors de nos réunions de cadrage, nous avons identifié les différents axes d'analyse nécessaires pour comprendre 
+    en profondeur les dynamiques du réseau électrique français. Pour optimiser notre travail et assurer une couverture 
+    exhaustive du sujet, nous avons décidé de répartir les sujets selon les compétences et les centres d'intérêt de 
+    chacun. Dans ce contexte, j'ai pris en charge l'analyse approfondie de la relation entre la consommation et la 
+    production d'électricité. Cette analyse cruciale vise à comprendre comment le système électrique français s'adapte 
+    aux variations de la demande et à identifier les potentielles périodes de tension sur le réseau.
+    """)
+    
+    # Titre de section
+    st.header("Évolution Comparative de la Production et de la Consommation Électrique (2012-2023)")
     
     # Création du DataFrame de comparaison
     comparaison = pd.DataFrame({
