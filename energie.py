@@ -75,8 +75,57 @@ if page == pages[1] :
        
 
 
-if page == pages[2] : 
+if page == pages[2]:
     st.write("### Statistiques et indicateurs")
+    
+    # Création du DataFrame de comparaison
+    comparaison = pd.DataFrame({
+        'Production Totale': df['Production_Totale'],
+        'Consommation': df['Consommation (MW)']
+    })
+    
+    # Calcul des moyennes annuelles
+    comparaison_annuelle = comparaison.resample('Y').mean()
+    
+    # Définition des couleurs
+    color_production = 'blue'
+    color_consommation = 'orange'
+    
+    # Création du graphique
+    fig, ax = plt.subplots(figsize=(16, 8))
+    
+    comparaison_annuelle.plot(
+        kind='bar',
+        color=[color_production, color_consommation],
+        width=0.8,
+        ax=ax
+    )
+    
+    # Personnalisation du graphique
+    ax.set_title('Comparaison Production vs Consommation Totale par Année',
+                 fontsize=16,
+                 pad=20)
+    ax.set_xlabel('Année', fontsize=12)
+    ax.set_ylabel('Moyenne annuelle (MW)', fontsize=12)
+    
+    ax.set_xticklabels([label.get_text()[:4] for label in ax.get_xticklabels()],
+                       rotation=45, ha='right')
+    
+    ax.legend(bbox_to_anchor=(1.05, 1),
+              loc='upper left',
+              fontsize=12)
+    
+    ax.grid(True, alpha=0.2, axis='y')
+    
+    # Ajustement de la mise en page
+    fig.tight_layout()
+    
+    # Affichage du graphique dans Streamlit
+    st.pyplot(fig)
+    
+    # Affichage des statistiques
+    st.write("\nStatistiques annuelles :")
+    st.dataframe(comparaison_annuelle.describe())
 
 
 
