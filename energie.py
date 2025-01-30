@@ -20,15 +20,24 @@ def get_logo():
 # Chargement des données
 @st.cache_data
 def load_data():
-    file_id = "1QyqA7mJ68MiKQ7-7p-LTmrRNmRFAl5IJ"
+    # Utiliser le bon ID de fichier
+    file_id = "15l7StwyKMtW9dGB-MrnD_hcZtELMCqbz"
     url = f"https://drive.google.com/uc?id={file_id}"
+    
     try:
         output = "eco2mix-regional-cons-def.csv"
         gdown.download(url, output, quiet=False)
-        return pd.read_csv(output, sep=";")
+        df = pd.read_csv(output, sep=";")
+        return df
     except Exception as e:
         st.error("Erreur lors du chargement des données")
-        raise e
+        st.write(f"Détails de l'erreur : {str(e)}")
+        return None
+
+# Utilisation
+df = load_data()
+if df is None:
+    st.stop()
 
 # Affichage du logo
 try:
