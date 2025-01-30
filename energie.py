@@ -13,7 +13,7 @@ import gdown
 @st.cache_data
 def get_logo():
     file_id = "1ZF4CX_g41jhOjNipe9OhCTB7mnDLn6Ed"
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    url = f"https://drive.google.com/file/d/15l7StwyKMtW9dGB-MrnD_hcZtELMCqbz/view?usp=drive_link"
     response = requests.get(url)
     return BytesIO(response.content)
 
