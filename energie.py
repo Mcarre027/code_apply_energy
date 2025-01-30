@@ -42,6 +42,14 @@ except Exception:
 df = load_data()
 if df is None:
     st.stop()
+#création de la variable "production totale 
+df['Production_Totale'] = df[['Thermique (MW)', 'Nucléaire (MW)', 'Eolien (MW)',
+                                      'Solaire (MW)', 'Hydraulique (MW)', 'Bioénergies (MW)','Pompage (MW)']].sum(axis=1)
+#Changement du type de la variable éolien
+df['Eolien (MW)'] = pd.to_numeric(df['Eolien (MW)'], errors='coerce')
+#préparation pour des heures  graphique
+df['Date - Heure'] = pd.to_datetime(df['Date - Heure'])
+df.set_index('Date - Heure', inplace=True)
 
 # Titre principal
 st.title("Observatoire de la production et consommation électrique en France")
