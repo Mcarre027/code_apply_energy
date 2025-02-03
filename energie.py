@@ -85,7 +85,7 @@ elif page == pages[2]:
         df["Année"] = df["Date - Heure"].dt.year
 
         # Comparaison production vs consommation
-        st.write("### 📅 Production vs Consommation Totale par Année")
+        st.write("## 📅 Production vs Consommation Totale par Année")
         comparaison = df[["Date - Heure", "Production_Totale", "Consommation (MW)"]].set_index("Date - Heure")
         comparaison_annuelle = comparaison.resample("Y").mean()
 
@@ -96,7 +96,7 @@ elif page == pages[2]:
         st.pyplot(fig)
 
         # Matrice de corrélation
-        st.write("### 📈 Matrice de corrélation")
+        st.write("## 📈 Matrice de corrélation")
         colonnes_analyse = ["Consommation (MW)", "Production_Totale"] + colonnes_production
         correlation_matrix = df[colonnes_analyse].corr()
 
