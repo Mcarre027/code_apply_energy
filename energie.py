@@ -107,33 +107,6 @@ elif page == pages[2]:
             ax.set_title("Matrice de corrélation entre consommation et production")
             st.pyplot(fig)
 
-        # Graphique de répartition par région
-        if st.checkbox("Afficher la répartition par région"):
-            production_par_region = df.groupby('Région')["Production_Totale"].sum()
-            consommation_par_region = df.groupby('Région')["Consommation (MW)"].sum()
-
-            comparaison_region = pd.DataFrame({
-                'Production': production_par_region,
-                'Consommation': consommation_par_region
-            })
-
-            fig, ax = plt.subplots(figsize=(14, 7))
-            comparaison_region.plot(kind='bar', ax=ax)
-            ax.set_title('Comparaison Production vs Consommation par région (MW)')
-            st.pyplot(fig)
-
-        # Évolution des énergies renouvelables et non renouvelables
-        df['NonRenew'] = df[['Thermique (MW)', 'Nucléaire (MW)']].sum(axis=1)
-        df['Renew'] = df[['Eolien (MW)', 'Solaire (MW)', 'Hydraulique (MW)', 'Bioénergies (MW)']].sum(axis=1)
-
-        if st.checkbox("Afficher l'évolution des énergies renouvelables et non renouvelables"):
-            df15_22 = df[(df['Année'] >= 2015) & (df['Année'] <= 2022)]
-
-            fig, ax = plt.subplots(figsize=(10, 6))
-            sns.lineplot(x='Année', y='Renew', data=df15_22, marker='o', label='Renouvelable', ax=ax)
-            sns.lineplot(x='Année', y='NonRenew', data=df15_22, marker='o', label='Non Renouvelable', ax=ax)
-            ax.set_title("Évolution de la production d'énergie par année")
-            st.pyplot(fig)
 
 # Page Modélisation
 elif page == pages[3]:
