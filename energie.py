@@ -148,16 +148,16 @@ elif page == pages[2]:
 
 # Page Modélisation
 elif page == pages[3]:
-    st.write("## 🤖 Modélisation")
-    st.write("")  # Espace visuel
-    st.write("")  # Espace visuel
-    if model is not None:
+        st.write("## 🤖 Modélisation")
+        st.write("")  # Espace visuel
+        st.write("")  # Espace visuel
+
         st.write(
             """
             Cette section présente une démonstration du modèle de machine learning entraîné pour prédire 
             la consommation électrique de l'année 2019 à partir des données de production.
             """
-        )
+                    )
         st.write("")  # Espace visuel
         st.write("")  # Espace visuel
         st.write("### Visualisation des prédictions")
