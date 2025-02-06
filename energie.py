@@ -51,13 +51,17 @@ if page == pages[0]:
 # Page Exploration du jeu de données
 elif page == pages[1]:
     st.write("## 🔍 Exploration")
+    st.write("")  # Espace visuel
     if df is not None:
         st.write("### Aperçu du dataset")
         st.dataframe(df.sample(10))
+        st.write("")  # Espace visuel
         st.write("### Dimensions")
         st.write(f"Lignes : {df.shape[0]}, Colonnes : {df.shape[1]}")
+        st.write("")  # Espace visuel
         st.write("### Statistiques descriptives")
         st.write(df.describe())
+        st.write("")  # Espace visuel
         st.write("### Valeurs manquantes")
         missing_values = df.isna().sum()
         cols_with_na = missing_values[missing_values > 0]
@@ -71,6 +75,8 @@ elif page == pages[1]:
 # Page Analyse et visualisations
 elif page == pages[2]:
     st.write("## 📊 Analyse")
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
     if df is not None:
         # Convertir les colonnes en numérique
         colonnes_production = ["Thermique (MW)", "Nucléaire (MW)", "Eolien (MW)", "Solaire (MW)", 
@@ -80,7 +86,7 @@ elif page == pages[2]:
         
         df["Production_Totale"] = df[colonnes_production].sum(axis=1)
         df["Date - Heure"] = pd.to_datetime(df["Date - Heure"], errors="coerce")
-        
+        st.write("")  # Espace visuel
         # Comparaison production vs consommation
         st.write("### Production vs Consommation")
         comparaison = df[["Date - Heure", "Production_Totale", "Consommation (MW)"]].set_index("Date - Heure")
@@ -91,6 +97,9 @@ elif page == pages[2]:
         ax.set_xlabel("Année")
         ax.set_ylabel("Moyenne annuelle (MW)")
         st.pyplot(fig)
+        st.write("")  # Espace visuel
+        st.write("")  # Espace visuel
+        st.write("")  # Espace visuel
 
         # Matrice de corrélation
         st.write("### Corrélation")
@@ -100,12 +109,35 @@ elif page == pages[2]:
         fig, ax = plt.subplots(figsize=(10, 5))
         sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", center=0, ax=ax)
         st.pyplot(fig)
+        st.write("")  # Espace visuel
+        st.write("")  # Espace visuel
+        st.write("## Justification des variables utilisées pour prédire la consommation")
+        st.write("")  # Espace visuel
+        st.write("""La matrice de corrélation montre que les différentes sources de production d'énergie ont des relations variées avec la consommation. 
+                    Nous avons choisi les variables suivantes pour la prédiction : **Thermique**, **Nucléaire**, **Éolien**, **Solaire**, **Hydraulique**, 
+                    **Bioénergies**, et **Pompage**. 
+
+                    - Les sources telles que les **bioénergies** (corrélation : 0.59), l'**hydraulique** (0.44) et le **thermique** (0.33) 
+                    sont fortement corrélées à la consommation.
+                    - La **production nucléaire** est stable mais reste un facteur clé (corrélation : 0.21).
+                         Bien que les énergies renouvelables comme l'**éolien** (0.059) et le **solaire** (0.04) aient des corrélations plus faibles, elles permettent de capturer les variations saisonnières.
+                    - Enfin, la variable **Pompage** (corrélation : -0.19) est utile pour modéliser les effets inverses liés au stockage d'énergie.
+
+                    Ces variables permettent ainsi de mieux représenter les dynamiques entre production et consommation énergétique.
+                """)
+
+                 
     else:
         st.error("Les données n'ont pas pu être chargées.")
 
 # Page Modélisation
 elif page == pages[3]:
     st.write("## 🤖 Modélisation")
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+    st.write("### Visualisation des prédictions")
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
     if df is not None:
         predictions_file = "predictions_2019.csv"
         
