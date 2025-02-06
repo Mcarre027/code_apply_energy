@@ -121,8 +121,7 @@ elif page == pages[2]:
                     - La **production nucléaire** est stable mais reste un facteur clé (corrélation : 0.21).
                          Bien que les énergies renouvelables comme l'**éolien** (0.059) et le **solaire** (0.04) aient des corrélations plus faibles, elles permettent de capturer les variations saisonnières.
                     - Enfin, la variable **Pompage** (corrélation : -0.19) est utile pour modéliser les effets inverses liés au stockage d'énergie.
-
-                    Ces variables permettent ainsi de mieux représenter les dynamiques entre production et consommation énergétique.
+                 Ces variables permettent ainsi de mieux représenter les dynamiques entre production et consommation énergétique.
                 """)
 
                  
