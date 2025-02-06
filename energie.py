@@ -174,5 +174,12 @@ elif page == pages[3]:
             r2 = r2_score(df_eval["Consommation (MW)"], df_eval["Consommation Prédite"])
             st.write(f"Erreur quadratique moyenne (MSE) : {mse:.2f}")
             st.write(f"Score R² : {r2:.2f}")
+            st.write("")  # Espace visuel
+            st.write("")  # Espace visuel
+            st.write("""Ces résultats indiquent que le modèle explique 92 % de la variance des données et que les prédictions 
+                     suivent de près les tendances mensuelles de la consommation réelle. 
+                     Cependant, quelques écarts peuvent être observés, notamment en début et fin d'année, 
+                     laissant entrevoir de possibles améliorations pour affiner les prévisions sur ces périodes.
+                     """)
     else:
         st.error("Les données nécessaires à la modélisation n'ont pas pu être chargées.")
