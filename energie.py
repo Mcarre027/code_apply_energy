@@ -26,19 +26,6 @@ def load_data():
         st.error(f"Erreur lors de la lecture du fichier CSV : {e}")
         return None
 
-# Charger le modèle pré-entraîné
-@st.cache_resource
-def load_model():
-    try:
-        return joblib.load("random_forest_model.pkl")
-    except FileNotFoundError:
-        st.error("Le modèle n'a pas été trouvé.")
-        return None
-
-# Charger les données et le modèle
-df = load_data()
-model = load_model()
-
 
 # Titre principal
 st.title("⚡ Prédiction de la consommation électrique en France")
