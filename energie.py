@@ -116,7 +116,6 @@ elif page == pages[2]:
         st.write("""La matrice de corrélation montre que les différentes sources de production d'énergie ont des relations variées avec la consommation. 
                     Nous avons choisi les variables suivantes pour la prédiction : **Thermique**, **Nucléaire**, **Éolien**, **Solaire**, **Hydraulique**, 
                     **Bioénergies**, et **Pompage**. 
-
                     - Les sources telles que les **bioénergies** (corrélation : 0.59), l'**hydraulique** (0.44) et le **thermique** (0.33) 
                     sont fortement corrélées à la consommation.
                     - La **production nucléaire** est stable mais reste un facteur clé (corrélation : 0.21).
