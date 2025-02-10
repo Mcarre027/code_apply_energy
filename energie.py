@@ -113,16 +113,36 @@ elif page == pages[2]:
         st.write("")  # Espace visuel
         st.write("## Justification des variables utilisées pour prédire la consommation")
         st.write("")  # Espace visuel
-        st.write("""La matrice de corrélation montre que les différentes sources de production d'énergie ont des relations variées avec la consommation. 
-                    Nous avons choisi les variables suivantes pour la prédiction : **Thermique**, **Nucléaire**, **Éolien**, **Solaire**, **Hydraulique**, 
-                    **Bioénergies**, et **Pompage**. 
-                    - Les sources telles que les **bioénergies** (corrélation : 0.59), l'**hydraulique** (0.44) et le **thermique** (0.33) 
-                    sont fortement corrélées à la consommation.
-                    - La **production nucléaire** est stable mais reste un facteur clé (corrélation : 0.21).
-                         Bien que les énergies renouvelables comme l'**éolien** (0.059) et le **solaire** (0.04) aient des corrélations plus faibles, elles permettent de capturer les variations saisonnières.
-                    - Enfin, la variable **Pompage** (corrélation : -0.19) est utile pour modéliser les effets inverses liés au stockage d'énergie.
-                 Ces variables permettent ainsi de mieux représenter les dynamiques entre production et consommation énergétique.
-                """)
+        st.write("""
+### Sélection des Variables pour la Modélisation
+
+La matrice de corrélation montre que les différentes sources de production d'énergie entretiennent des relations variées avec la consommation.  
+Nous avons sélectionné les variables suivantes pour la prédiction de la consommation énergétique :  
+**Thermique**, **Nucléaire**, **Éolien**, **Solaire**, **Hydraulique**, **Bioénergies**, et **Pompage**.
+
+#### 1. Variables fortement corrélées à la consommation
+Certaines sources de production montrent une corrélation significative avec la consommation :  
+- Les **bioénergies** (corrélation : **0.59**),  
+- L'**hydraulique** (corrélation : **0.44**),  
+- Le **thermique** (corrélation : **0.33**).  
+
+Ces variables contribuent directement à expliquer les variations de la consommation.
+
+#### 2. Production nucléaire
+La **production nucléaire** est stable mais reste un facteur clé avec une corrélation de **0.21**.
+
+#### 3. Énergies renouvelables et variations saisonnières
+Bien que les énergies renouvelables présentent des corrélations plus faibles, elles capturent efficacement les variations saisonnières :  
+- **Éolien** (corrélation : **0.059**),  
+- **Solaire** (corrélation : **0.04**).
+
+#### 4. Effet du pompage et stockage d'énergie
+La variable **Pompage** a une corrélation négative (**-0.19**), ce qui reflète son rôle dans le stockage d'énergie, entraînant un effet inverse sur la consommation.
+
+#### Conclusion
+Ces variables permettent de représenter les dynamiques complexes entre production et consommation énergétique, tout en prenant en compte les variations saisonnières, les fluctuations de production et les effets liés au stockage d'énergie. Ce choix améliore la précision des prédictions du modèle.
+""")
+
 
                  
     else:
