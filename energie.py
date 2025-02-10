@@ -88,7 +88,7 @@ elif page == pages[2]:
         df["Date - Heure"] = pd.to_datetime(df["Date - Heure"], errors="coerce")
         st.write("")  # Espace visuel
         # Comparaison production vs consommation
-        st.write("### Production vs Consommation")
+        st.write("## Production vs Consommation")
         comparaison = df[["Date - Heure", "Production_Totale", "Consommation (MW)"]].set_index("Date - Heure")
         comparaison_annuelle = comparaison.resample("Y").mean()
 
@@ -102,7 +102,7 @@ elif page == pages[2]:
         st.write("")  # Espace visuel
 
         # Matrice de corrélation
-        st.write("### Corrélation")
+        st.write("## Corrélation")
         colonnes_analyse = ["Consommation (MW)", "Production_Totale"] + colonnes_production
         correlation_matrix = df[colonnes_analyse].corr()
 
@@ -111,10 +111,10 @@ elif page == pages[2]:
         st.pyplot(fig)
         st.write("")  # Espace visuel
         st.write("")  # Espace visuel
-        st.write("## Justification des variables utilisées pour prédire la consommation")
+        st.write("### Justification des variables utilisées pour prédire la consommation")
         st.write("")  # Espace visuel
         st.write("""
-### Sélection des Variables pour la Modélisation
+         Sélection des Variables pour la Modélisation
 
 La matrice de corrélation montre que les différentes sources de production d'énergie entretiennent des relations variées avec la consommation.  
 Nous avons sélectionné les variables suivantes pour la prédiction de la consommation énergétique :  
