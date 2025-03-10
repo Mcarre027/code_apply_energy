@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import plotly.express as px
+import plotly.graph_objects as go
 from pathlib import Path
 from sklearn.metrics import mean_squared_error, r2_score
 
@@ -40,13 +42,20 @@ page = st.sidebar.radio("Aller vers", pages)
 # Page Introduction
 if page == pages[0]:
     st.write("## 📘 Introduction")
-    st.write(
-        """
-        Cette application présente une analyse des données électriques en France et une démonstration de 
-        modèle de machine learning pour prédire la consommation. Vous pourrez explorer les données, 
-        examiner des visualisations clés, et comprendre les facteurs influençant la consommation.
-        """
-    )
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+    st.write("""
+        Cette application présente une analyse des données électriques en France et une démonstration 
+        de modèle de machine learning pour prédire la consommation.
+    """)
+    st.write("")  # Espace visuel
+    # 🔹 Chargement et affichage de la vidéo locale
+    video_path = "20250309_0113_Blend Video_blend_01jnw3zxa8ebhtsdjmkk4m6j3r.mp4"  
+    if os.path.exists(video_path):
+        st.video(video_path, start_time=0)
+    
+        
+    
 
 # Page Exploration du jeu de données
 elif page == pages[1]:
@@ -148,32 +157,29 @@ Ces variables permettent de représenter les dynamiques complexes entre producti
     else:
         st.error("Les données n'ont pas pu être chargées.")
 
-# Page Modélisation
 elif page == pages[3]:
-    st.write("## 🤖 Modélisation")
+    st.subheader("🤖 Modélisation")
     st.write("")  # Espace visuel
     st.write("")  # Espace visuel
-    st.write("### Visualisation des prédictions")
-    st.write("")  # Espace visuel
-    st.write("")  # Espace visuel
+    
     if df is not None:
         predictions_file = "predictions_2019.csv"
         
-        # Préparer les données
+        # 📌 Préparer les données
         X_production = df[["Thermique (MW)", "Nucléaire (MW)", "Eolien (MW)", "Solaire (MW)", 
                            "Hydraulique (MW)", "Bioénergies (MW)", "Pompage (MW)"]]
         X_production = X_production.replace(['ND', '-'], 0).fillna(0)
 
-        # Chargement des prédictions
+        # 📌 Chargement des prédictions 2019
         if os.path.exists(predictions_file):
             df_filtered = pd.read_csv(predictions_file, parse_dates=["Date - Heure"])
         else:
-            st.error("Le fichier de prédictions n'a pas été trouvé.")
+            st.error("Le fichier de prédictions 2019 n'a pas été trouvé.")
             df_filtered = pd.DataFrame()
 
+        # 📌 Affichage des résultats 2019
         if not df_filtered.empty:
-            # Visualisation des consommations réelle et prédite
-            st.write("### Comparaison entre consommation réelle et prédite (année 2019)")
+            st.subheader("📊 Comparaison entre consommation réelle et prédite (2019)")
             df_filtered["Mois"] = df_filtered["Date - Heure"].dt.to_period("M")
             df_grouped = df_filtered.groupby("Mois")[["Consommation (MW)", "Consommation Prédite"]].mean().reset_index()
 
@@ -188,18 +194,66 @@ elif page == pages[3]:
             ax.grid(True, linestyle='--', alpha=0.5)
             st.pyplot(fig)
 
-            # Affichage des métriques d'évaluation du modèle
+            # 📌 Affichage des métriques
             df_eval = df_filtered[["Consommation (MW)", "Consommation Prédite"]].dropna()
             mse = mean_squared_error(df_eval["Consommation (MW)"], df_eval["Consommation Prédite"])
             r2 = r2_score(df_eval["Consommation (MW)"], df_eval["Consommation Prédite"])
-            st.write(f"Erreur quadratique moyenne (MSE) : {mse:.2f}")
-            st.write(f"Score R² : {r2:.2f}")
-            st.write("")  # Espace visuel
-            st.write("")  # Espace visuel
-            st.write("""Ces résultats indiquent que le modèle explique 92 % de la variance des données et que les prédictions 
-                     suivent de près les tendances mensuelles de la consommation réelle. 
-                     Cependant, quelques écarts peuvent être observés, notamment en début et fin d'année, 
-                     laissant entrevoir de possibles améliorations pour affiner les prévisions sur ces périodes.
-                     """)
-    else:
-        st.error("Les données nécessaires à la modélisation n'ont pas pu être chargées.")
+            st.write(f"📉 **Erreur quadratique moyenne (MSE) :** {mse:.2f}")
+            st.write(f"📈 **Score R² :** {r2:.2f}")
+
+    # 📌 CHARGEMENT DES PRÉDICTIONS XGBoost POUR 2030
+            try:
+                df_pred = pd.read_csv("predictions_2030.csv", encoding="utf-8", sep=",")  # Charger le fichier
+
+                # ✅ Renommer correctement les colonnes
+                df_pred.rename(columns={'Date': 'date', 'Prévision Consommation (MW)': 'xgboost'}, inplace=True)
+
+                # ✅ Convertir la colonne date en datetime
+                df_pred['date'] = pd.to_datetime(df_pred['date'])
+
+                # Vérification des colonnes après renommage
+                print("🔍 Colonnes après renommage :", df_pred.columns.tolist())
+
+            except FileNotFoundError:
+                st.error("❌ Fichier `predictions_2030.csv` introuvable.")
+                df_pred = None
+
+
+    # 🔮 Gros titre pour la section prédictions mensuelles jusqu'en 2030
+    st.markdown("""
+        <h1 style="text-align: center; color: #1E3A8A; font-size: 36px;">
+            🔮 Projection Énergétique : Prédictions Mensuelles Jusqu’en 2030 ⚡
+        </h1>
+    """, unsafe_allow_html=True)
+
+    if df_pred is not None:
+        # 📌 Sélection d'une année (2024-2030)
+        year_selected = st.selectbox("📅 Sélectionnez une année :", list(range(2024, 2031)))
+
+        # 📌 Sélection d'un mois
+        month_selected = st.selectbox("📆 Sélectionnez un mois :", list(range(1, 13)))
+
+        # 📌 Filtrer les prédictions pour le mois et l'année sélectionnés
+        filtered_df = df_pred[
+            (df_pred['date'].dt.year == year_selected) & 
+            (df_pred['date'].dt.month == month_selected)
+        ]
+
+        # 📌 Affichage de la prévision
+        if not filtered_df.empty:
+            pred_value = filtered_df['xgboost'].values[0]
+            st.metric(label=f"📊 Prédiction XGBoost pour {month_selected}/{year_selected}", value=f"{pred_value:.2f} MW")
+        else:
+            st.warning("⚠️ Aucune donnée disponible pour ce mois/année.")
+
+        # 📌 Graphique des prédictions mensuelles
+        fig = px.line(
+            df_pred,
+            x='date',
+            y='xgboost',
+            labels={'date': "Date", 'xgboost': "Consommation (MW)"},
+            title="📊 Évolution des Prédictions Mensuelles de Consommation (MW) - XGBoost",
+            color_discrete_sequence=["#D97706"],  # Orange
+        )
+        st.plotly_chart(fig)
+       
