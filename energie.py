@@ -313,7 +313,7 @@ Ce projet nous a permis d'explorer plusieurs approches de modélisation pour ant
 
 
 ### ✅ Points forts du projet
-- Déploiement d’un **modèle hybride Prophet + ARIMA** et d’un modèle **XGBoost**, atteignant jusqu’à **95 % de précision** sur les données historiques.
+- Déploiement d’un **modèle XGBOOST** et d’un modèle **RandomForestRegressor**, atteignant jusqu’à **95 % de précision** sur les données historiques.
 - Intégration dans une **application Streamlit interactive**, facilitant l'exploration des prédictions et des variables.
 
 ### ⚠️ Limites actuelles
