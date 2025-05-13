@@ -42,7 +42,7 @@ Cette application Streamlit permet de prédire et d’analyser la consommation �
 
 ```
 .
-├── app.py                         # Application principale Streamlit
+├── energie.py                    # Application principale Streamlit
 ├── eco2mix-regional-cons-def.csv # Données d'origine (RTE)
 ├── predictions_2019.csv          # Prédictions vs réel sur 2019
 ├── predictions_2030.csv          # Prédictions futures (XGBoost)
