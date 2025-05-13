@@ -36,7 +36,7 @@ st.title("⚡ Prédiction de la consommation électrique en France")
 # Navigation
 with st.sidebar:
     st.title("🗂️ Navigation")
-pages = ["📘 Introduction", "🔍 Exploration des données", "📊 Analyse", "🤖 Modélisation"]
+pages = ["📘 Introduction", "🔍 Exploration des données", "📊 Analyse", "🤖 Modélisation", "🔚 Conclusion générale"]
 page = st.sidebar.radio("Aller vers", pages)
 
 # Page Introduction
@@ -158,10 +158,16 @@ Ces variables permettent de représenter les dynamiques complexes entre producti
         st.error("Les données n'ont pas pu être chargées.")
 
 elif page == pages[3]:
-    st.subheader("🤖 Modélisation")
+    st.write("## 🤖 Modélisation")
     st.write("")  # Espace visuel
     st.write("")  # Espace visuel
-    
+    st.markdown("""Dans le cadre de ce projet, nous avons testé et entraîné plusieurs modèles de régression afin de prédire la consommation énergétique à partir des différentes sources de production.  
+        Parmi les algorithmes évalués, les modèles **RandomForestRegressor** et **XGBoost** se sont révélés les plus pertinents en termes de performance.  
+        Le modèle présenté ici est le **RandomForestRegressor**, choisi après concertation pour sa robustesse, sa capacité à gérer les relations non linéaires et sa bonne interprétabilité.
+        """)
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+
     if df is not None:
         predictions_file = "predictions_2019.csv"
         
@@ -179,13 +185,17 @@ elif page == pages[3]:
 
         # 📌 Affichage des résultats 2019
         if not df_filtered.empty:
-            st.subheader("📊 Comparaison entre consommation réelle et prédite (2019)")
+            st.markdown("""
+        <h1 style="text-align: center; color: #1E3A8A; font-size: 36px;">
+            📊 Comparaison entre consommation réelle et prédite (2019)
+        </h1>
+    """, unsafe_allow_html=True)
             df_filtered["Mois"] = df_filtered["Date - Heure"].dt.to_period("M")
             df_grouped = df_filtered.groupby("Mois")[["Consommation (MW)", "Consommation Prédite"]].mean().reset_index()
 
             fig, ax = plt.subplots(figsize=(10, 6))
-            ax.bar(df_grouped["Mois"].astype(str), df_grouped["Consommation (MW)"], width=0.4, label="Consommation réelle", color="blue", align='center')
-            ax.bar(df_grouped["Mois"].astype(str), df_grouped["Consommation Prédite"], width=0.4, label="Consommation prédite", color="orange", align='edge')
+            ax.bar(df_grouped["Mois"].astype(str), df_grouped["Consommation (MW)"], width=0.4, label="Consommation réelle", color="#3B528B", align='center')
+            ax.bar(df_grouped["Mois"].astype(str), df_grouped["Consommation Prédite"], width=0.4, label="Consommation prédite", color="#84CA66", align='edge')
             ax.set_xlabel("Mois")
             ax.set_ylabel("Consommation moyenne (MW)")
             ax.set_title("Comparaison entre consommation réelle et prédite par mois (2019)")
@@ -193,13 +203,37 @@ elif page == pages[3]:
             plt.xticks(rotation=45)
             ax.grid(True, linestyle='--', alpha=0.5)
             st.pyplot(fig)
+            st.write("")  # Espace visuel
+            st.write("")  # Espace visuel
+            feature_importance_df = pd.read_csv("feature_importance_global.csv")
+            fig, ax = plt.subplots(figsize=(10, 6))
+    
+            sns.barplot(data= feature_importance_df, x='Importance', y='Variable',palette="viridis", ax=ax)
+            ax.set_title("Importance des variables dans le modèle Random Forest")
+            st.pyplot(fig)
 
             # 📌 Affichage des métriques
             df_eval = df_filtered[["Consommation (MW)", "Consommation Prédite"]].dropna()
             mse = mean_squared_error(df_eval["Consommation (MW)"], df_eval["Consommation Prédite"])
             r2 = r2_score(df_eval["Consommation (MW)"], df_eval["Consommation Prédite"])
+            st.write("")  # Espace visuel
+            st.markdown("### Paramètres du modèle Random Forest")
+            st.markdown("""
+            - **Modèle** : RandomForestRegressor
+            - **Nombre d'arbres (n_estimators)** : 200  
+            - **Profondeur maximale des arbres (max_depth)** : 20  
+            - **Taille du jeu de test** : 20 %  
+            - **Random State** : 42
+            """)
+            st.write("")  # Espace visuel
+            st.markdown("### Résultats de l'entraînement")
             st.write(f"📉 **Erreur quadratique moyenne (MSE) :** {mse:.2f}")
             st.write(f"📈 **Score R² :** {r2:.2f}")
+            st.write("")  # Espace visuel
+            st.write("")  # Espace visuel
+            st.write("")  # Espace visuel
+            st.write("")  # Espace visuel
+            
 
     # 📌 CHARGEMENT DES PRÉDICTIONS XGBoost POUR 2030
             try:
@@ -225,6 +259,14 @@ elif page == pages[3]:
             🔮 Projection Énergétique : Prédictions Mensuelles Jusqu’en 2030 ⚡
         </h1>
     """, unsafe_allow_html=True)
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+    st.markdown("""Pour aller plus loin dans le projet, nous avons utilisé des **modèles de séries temporelles** afin de projeter la consommation énergétique **jusqu'en 2030**.  
+                Cette approche permet d'anticiper les tendances futures à partir des données historiques, en intégrant les effets saisonniers et les évolutions de long terme.
+                            """)
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+
 
     if df_pred is not None:
         # 📌 Sélection d'une année (2024-2030)
@@ -232,19 +274,22 @@ elif page == pages[3]:
 
         # 📌 Sélection d'un mois
         month_selected = st.selectbox("📆 Sélectionnez un mois :", list(range(1, 13)))
+        st.write("")  # Espace visuel
 
         # 📌 Filtrer les prédictions pour le mois et l'année sélectionnés
         filtered_df = df_pred[
             (df_pred['date'].dt.year == year_selected) & 
             (df_pred['date'].dt.month == month_selected)
         ]
+        st.write("")  # Espace visuel
 
         # 📌 Affichage de la prévision
         if not filtered_df.empty:
             pred_value = filtered_df['xgboost'].values[0]
-            st.metric(label=f"📊 Prédiction XGBoost pour {month_selected}/{year_selected}", value=f"{pred_value:.2f} MW")
+            st.metric(label=f"Prédiction XGBoost pour {month_selected}/{year_selected}", value=f"{pred_value:.2f} MW")
         else:
             st.warning("⚠️ Aucune donnée disponible pour ce mois/année.")
+            st.write("")  # Espace visuel
 
         # 📌 Graphique des prédictions mensuelles
         fig = px.line(
@@ -257,3 +302,37 @@ elif page == pages[3]:
         )
         st.plotly_chart(fig)
        
+elif page == pages[4]:
+    st.write("## 🔚 Conclusion générale")
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+    st.markdown("""
+## Conclusion & Perspectives
+
+Ce projet nous a permis d'explorer plusieurs approches de modélisation pour anticiper la consommation énergétique en France à partir des données de production. Grâce à une analyse exploratoire rigoureuse et une sélection fine des variables, nous avons pu construire un modèle robuste, mais encore perfectible.
+
+
+### ✅ Points forts du projet
+- Déploiement d’un **modèle hybride Prophet + ARIMA** et d’un modèle **XGBoost**, atteignant jusqu’à **95 % de précision** sur les données historiques.
+- Intégration dans une **application Streamlit interactive**, facilitant l'exploration des prédictions et des variables.
+
+### ⚠️ Limites actuelles
+
+Malgré des performances prometteuses, nos modèles présentent encore des limites dans la **capture des évolutions à long terme** de la consommation.  
+Ce manque de finesse est principalement dû à l’**absence de données exogènes** (météo, événements économiques, activité industrielle), indispensables pour anticiper des **variations structurelles**.
+
+### ⚠️ Anticipation des ruptures et blackouts
+
+À ce stade, nos modèles ne permettent pas encore de prédire efficacement les **blackouts** ou les **déséquilibres critiques** entre production et consommation.  
+Cependant, l’architecture mise en place ouvre la voie à de futurs développements dans cette direction, à condition d'enrichir les jeux de données utilisés.
+
+### 🚀 Perspectives d’amélioration
+- **Ajouter des facteurs exogènes** (température, jours fériés, consommation industrielle) pour améliorer la précision.
+- **Tester des modèles LSTM** pour mieux détecter les tendances longues et les ruptures.
+- Intégrer un **système d’alerte basé sur des seuils critiques** pour prévenir les déséquilibres.
+
+---
+
+💡 Ce projet a été une **expérience collective riche**, mêlant modélisation, visualisation et déploiement.  
+L'application que nous avons développée constitue une première étape vers une **plateforme prédictive plus complète**, au service de la **planification énergétique et de la sécurité du réseau**.
+""")
