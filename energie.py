@@ -167,7 +167,16 @@ elif page == pages[3]:
         """)
     st.write("")  # Espace visuel
     st.write("")  # Espace visuel
-
+    st.markdown("### Paramètres du modèle Random Forest")
+    st.markdown("""
+            - **Modèle** : RandomForestRegressor
+            - **Nombre d'arbres (n_estimators)** : 200  
+            - **Profondeur maximale des arbres (max_depth)** : 20  
+            - **Taille du jeu de test** : 20 %  
+            - **Random State** : 42
+            """)
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
     if df is not None:
         predictions_file = "predictions_2019.csv"
         
@@ -217,14 +226,6 @@ elif page == pages[3]:
             mse = mean_squared_error(df_eval["Consommation (MW)"], df_eval["Consommation Prédite"])
             r2 = r2_score(df_eval["Consommation (MW)"], df_eval["Consommation Prédite"])
             st.write("")  # Espace visuel
-            st.markdown("### Paramètres du modèle Random Forest")
-            st.markdown("""
-            - **Modèle** : RandomForestRegressor
-            - **Nombre d'arbres (n_estimators)** : 200  
-            - **Profondeur maximale des arbres (max_depth)** : 20  
-            - **Taille du jeu de test** : 20 %  
-            - **Random State** : 42
-            """)
             st.write("")  # Espace visuel
             st.markdown("### Résultats de l'entraînement")
             st.write(f"📉 **Erreur quadratique moyenne (MSE) :** {mse:.2f}")
