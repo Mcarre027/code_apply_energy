@@ -53,7 +53,25 @@ if page == pages[0]:
     video_path = "20250309_0113_Blend Video_blend_01jnw3zxa8ebhtsdjmkk4m6j3r.mp4"  
     if os.path.exists(video_path):
         st.video(video_path, start_time=0)
-    
+
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+
+    st.write("""
+    ---
+
+    🎯 **Objectif principal :** Prévoir la consommation et les risques de blackout sur le réseau électrique français en croisant les données de consommation, de production et les conditions météorologiques.
+
+    🔎 **Contexte énergétique :** Le projet s’inscrit dans la transition énergétique liée à l’équilibre du réseau, notamment face aux pics de demande, aux conditions climatiques extrêmes ou aux problèmes de production.
+
+    📊 **Données exploitées :** Utilisation des historiques fournis par RTE avec les variables : région, consommation, production par filière.
+
+    🎯 **Enjeu stratégique :** Garantir la sécurité d’approvisionnement et éviter les coupures d’électricité, surtout avec l’essor des énergies renouvelables intermittentes et les problématiques des centrales nucléaires.
+
+    👥 **Compétences mobilisées :** Le projet s’appuie sur une équipe de 4 personnes avec des rôles et responsabilités sur certaines visualisations ou modèles.
+
+    📦 **Livrables :** Exploration / Data Visualisation / Corrélation variable / Modèle prédictif ML
+    """)
         
     
 
@@ -312,28 +330,41 @@ elif page == pages[4]:
 
 Ce projet nous a permis d'explorer plusieurs approches de modélisation pour anticiper la consommation énergétique en France à partir des données de production. Grâce à une analyse exploratoire rigoureuse et une sélection fine des variables, nous avons pu construire un modèle robuste, mais encore perfectible.
 
-
 ### ✅ Points forts du projet
 - Déploiement d’un **modèle XGBOOST** et d’un modèle **RandomForestRegressor**, atteignant jusqu’à **95 % de précision** sur les données historiques.
 - Intégration dans une **application Streamlit interactive**, facilitant l'exploration des prédictions et des variables.
 
-### ⚠️ Limites actuelles
+### ⛔ Contraintes du projet
+- Manque de temps pour approfondir certaines analyses et intégrer plus de données (vent, ensoleillement).
+- Gestion des obligations personnelles et professionnelles en parallèle du projet.
 
-Malgré des performances prometteuses, nos modèles présentent encore des limites dans la **capture des évolutions à long terme** de la consommation.  
-Ce manque de finesse est principalement dû à l’**absence de données exogènes** (météo, événements économiques, activité industrielle), indispensables pour anticiper des **variations structurelles**.
+### ⚙️ Limites techniques
+- Difficultés liées à la performance de Google Colab avec des datasets volumineux.
+- Manque de ressources pour certains modèles.
+- Accès limité à des données météo ou contextuelles (ex : COVID, maintenance, INSEE).
 
-### ⚠️ Anticipation des ruptures et blackouts
+### 📈 Résultats de modélisation
+- Le modèle permet de mieux anticiper la consommation, détecter des tensions réseau ou des risques de blackout.
+- Il contribue à la prise de décisions pour des actions préventives (délestage, flexibilité).
+- Le modèle XGBoost s’est révélé le plus performant avec une très bonne précision, mais les résultats sont limités sur le long terme en raison du manque de variables explicatives comme la température.
 
-À ce stade, nos modèles ne permettent pas encore de prédire efficacement les **blackouts** ou les **déséquilibres critiques** entre production et consommation.  
-Cependant, l’architecture mise en place ouvre la voie à de futurs développements dans cette direction, à condition d'enrichir les jeux de données utilisés.
+### 🔍 Analyse des résultats
+- La production énergétique est stable (notamment nucléaire), avec des disparités régionales.
+- La consommation varie fortement selon les saisons (pic hivernal) et les conditions météo extrêmes.
+- L’équilibrage consommation-production doit être sécurisé par des flux d’énergie venant des autres pays ou marchés.
 
-### 🚀 Perspectives d’amélioration
-- **Ajouter des facteurs exogènes** (température, jours fériés, consommation industrielle) pour améliorer la précision.
+### 🚀 Applications futures
+- Utilisation du modèle pour anticiper les échanges d’énergie avec les pays voisins.
+- Optimisation des achats sur les marchés spot (J+1, H+1).
+- Ajustement en temps réel de l’équilibre offre-demande.
+- Ajout de **facteurs exogènes** pour améliorer la précision.
 - **Tester des modèles LSTM** pour mieux détecter les tendances longues et les ruptures.
-- Intégrer un **système d’alerte basé sur des seuils critiques** pour prévenir les déséquilibres.
+- Intégrer un **système d’alerte basé sur des seuils critiques**.
+- **Mise à jour continue** du modèle avec les nouvelles données mensuelles.
+- **Création d’une API ou dashboard web** connecté aux données énergétiques nationales.
 
 ---
 
 💡 Ce projet a été une **expérience collective riche**, mêlant modélisation, visualisation et déploiement.  
-L'application que nous avons développée constitue une première étape vers une **plateforme prédictive plus complète**, au service de la **planification énergétique et de la sécurité du réseau**.
+L'application constitue une première étape vers une **plateforme prédictive plus complète**, au service de la **planification énergétique et de la sécurité du réseau**.
 """)
