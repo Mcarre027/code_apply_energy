@@ -179,12 +179,33 @@ elif page == pages[3]:
     st.write("## 🤖 Modélisation")
     st.write("")  # Espace visuel
     st.write("")  # Espace visuel
-    st.markdown("""Dans le cadre de ce projet, nous avons testé et entraîné plusieurs modèles de régression afin de prédire la consommation énergétique à partir des différentes sources de production.  
-        Parmi les algorithmes évalués, les modèles **RandomForestRegressor** et **XGBoost** se sont révélés les plus pertinents en termes de performance.  
-        Le modèle présenté ici est le **RandomForestRegressor**, choisi après concertation pour sa robustesse, sa capacité à gérer les relations non linéaires et sa bonne interprétabilité.
-        """)
+    
+    st.markdown("""
+#### Choix des modèles :
+
+Dans le cadre de ce projet, nous avons testé et utilisé plusieurs types de **modèles de régression** afin de prédire la consommation énergétique à partir des différentes sources de production.
+
+Parmi l’ensemble des modèles évalués, deux se sont distingués par leurs performances :
+
+- **Random Forest Regressor**  
+  Utilisé pour prédire spécifiquement la consommation sur l’année **2019**.  
+  Ce modèle a été retenu pour sa **robustesse**, sa capacité à modéliser des **relations non linéaires**, ainsi que pour sa **bonne interprétabilité**.
+
+- **XGBoost**  
+  Utilisé pour prédire la consommation sur **l’ensemble des années** du dataset.  
+  Ce modèle a montré d’excellentes performances en matière de **précision** et de **généralisation**.
+
+Ces deux modèles ont obtenu les **meilleurs résultats** lors de nos tests comparatifs.
+""")
     st.write("")  # Espace visuel
     st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+    st.write("")  # Espace visuel
+    st.markdown("""
+        <h1 style="text-align: center; color: #1E3A8A; font-size: 36px;">
+            📊 RandomForest - Comparaison entre consommation réelle et prédite (2019)
+        </h1>
+    """, unsafe_allow_html=True)
     st.markdown("### Paramètres du modèle Random Forest")
     st.markdown("""
             - **Modèle** : RandomForestRegressor
@@ -212,11 +233,7 @@ elif page == pages[3]:
 
         # 📌 Affichage des résultats 2019
         if not df_filtered.empty:
-            st.markdown("""
-        <h1 style="text-align: center; color: #1E3A8A; font-size: 36px;">
-            📊 Comparaison entre consommation réelle et prédite (2019)
-        </h1>
-    """, unsafe_allow_html=True)
+        
             df_filtered["Mois"] = df_filtered["Date - Heure"].dt.to_period("M")
             df_grouped = df_filtered.groupby("Mois")[["Consommation (MW)", "Consommation Prédite"]].mean().reset_index()
 
@@ -232,6 +249,9 @@ elif page == pages[3]:
             st.pyplot(fig)
             st.write("")  # Espace visuel
             st.write("")  # Espace visuel
+
+            #affichage feactures importances Randomforest
+            st.subheader("Importance des Variables")
             feature_importance_df = pd.read_csv("feature_importance_global.csv")
             fig, ax = plt.subplots(figsize=(10, 6))
     
@@ -248,6 +268,91 @@ elif page == pages[3]:
             st.markdown("### Résultats de l'entraînement")
             st.write(f"📉 **Erreur quadratique moyenne (MSE) :** {mse:.2f}")
             st.write(f"📈 **Score R² :** {r2:.2f}")
+            st.write("")  # Espace visuel
+            st.write("")  # Espace visuel
+           
+
+    if df is not None:
+        predictions_XGBOOST = "predictionsXGBOOST.csv"
+
+        # 📌 Préparer les données
+        X_production = df[["Thermique (MW)", "Nucléaire (MW)", "Eolien (MW)", "Solaire (MW)", 
+                           "Hydraulique (MW)", "Bioénergies (MW)", "Pompage (MW)"]]
+        X_production = X_production.replace(['ND', '-'], 0).fillna(0)
+
+        # 📌 Chargement des prédictions XGBOOST
+        if os.path.exists(predictions_XGBOOST):
+            df_filtered2 = pd.read_csv(predictions_XGBOOST, parse_dates=["Date - Heure"])
+        else:
+            st.error("Le fichier de prédictions XGBOOST n'a pas été trouvé.")
+            df_filtered2 = pd.DataFrame()
+        
+        # 📌 Affichage des résultats
+        if not df_filtered2.empty:
+            st.markdown("""
+        <h1 style="text-align: center; color: #1E3A8A; font-size: 36px;">
+            📊 XGBoost - Comparaison entre consommation réelle et prédite par année
+        </h1>
+    """, unsafe_allow_html=True)
+             
+                                                                                                                                                
+                                                                                                                                            
+        # 📌 Définition du modèle
+            st.markdown("### Paramètres du modèle XGBoost")
+            st.write("**Modèle :** XGBoost")
+            st.write("**Nombre d'arbres (n_estimators) :** 100")
+            st.write("**Learning rate :** 0.1")
+            st.write("**Taille du jeu de test :** 20%")
+            st.write("**Random State :** 42")
+
+            df_filtered2["Année"] = df_filtered2["Date - Heure"].dt.to_period("Y")
+            df_grouped2 = df_filtered2.groupby("Année")[["Consommation (MW)", "Consommation Prédite (MW)"]].mean().reset_index()
+
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.bar(df_grouped2["Année"].astype(str), df_grouped2["Consommation (MW)"], width=0.4, label="Consommation réelle", color="#3B528B", align='center')
+            ax.bar(df_grouped2["Année"].astype(str), df_grouped2["Consommation Prédite (MW)"], width=0.4, label="Consommation prédite", color="#84CA66", align='edge')
+            ax.set_xlabel("Année")
+            ax.set_ylabel("Consommation moyenne (MW)")
+            ax.set_title("Comparaison entre consommation réelle et prédite par année")
+            ax.legend(loc="upper right")
+            plt.xticks(rotation=45)
+            ax.grid(True, linestyle='--', alpha=0.5)
+            st.pyplot(fig)
+
+        # 📌 Affichage des métriques
+            df_eval2 = df_filtered2[["Consommation (MW)", "Consommation Prédite (MW)"]].dropna()
+            mse = mean_squared_error(df_eval2["Consommation (MW)"], df_eval2["Consommation Prédite (MW)"])
+            r2 = r2_score(df_eval2["Consommation (MW)"], df_eval2["Consommation Prédite (MW)"])
+            st.write("## Résultats de l'entraînement")
+            st.write(f"📉 **Erreur quadratique moyenne (MSE) :** {mse:.2f}")
+            st.write(f"📈 **Score R² :** {r2:.2f}")
+            st.write("")  # Espace visuel
+            st.write("")  # Espace visuel
+
+         # 📌 Intégration du fichier des "features importance"
+            fichier_importance_XGBOOST_csv = "feature_importances_XGBOOST.csv"
+
+            try:
+                df_importance = pd.read_csv(fichier_importance_XGBOOST_csv)
+            except FileNotFoundError:
+                st.error(f"Erreur : Le fichier '{fichier_importance_XGBOOST_csv}' n'a pas été trouvé. ")
+                st.stop() # Arrête l'exécution si le fichier n'est pas là
+            except Exception as e:
+                st.error(f"Une erreur est survenue lors du chargement du fichier d'importances : {e}")
+                st.stop()
+
+        # 📌 Création du graphique "features importance"
+            st.subheader("Importance des Variables")
+
+            fig, ax = plt.subplots(figsize=(10, 7)) 
+            sns.barplot(x='Importance', y='Feature', data=df_importance, ax=ax, palette='viridis')
+            ax.set_title("Influence des variables sur la prédiction de la consommation")
+            ax.set_xlabel("Score d'Importance")
+            ax.set_ylabel("Variable")
+            plt.tight_layout()
+
+            st.pyplot(fig)
+
             st.write("")  # Espace visuel
             st.write("")  # Espace visuel
             st.write("")  # Espace visuel
