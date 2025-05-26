@@ -141,7 +141,6 @@ elif page == pages[2]:
         st.write("### Justification des variables utilisées pour prédire la consommation")
         st.write("")  # Espace visuel
         st.write("""
-         Sélection des Variables pour la Modélisation
 
 La matrice de corrélation montre que les différentes sources de production d'énergie entretiennent des relations variées avec la consommation.  
 Nous avons sélectionné les variables suivantes pour la prédiction de la consommation énergétique :  
