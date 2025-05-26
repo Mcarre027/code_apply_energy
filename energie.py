@@ -66,7 +66,7 @@ if page == pages[0]:
 
     📊 **Données exploitées :** Utilisation des historiques fournis par RTE avec les variables : région, consommation, production par filière.
 
-    🎯 **Enjeu stratégique :** Garantir la sécurité d’approvisionnement et éviter les coupures d’électricité, surtout avec l’essor des énergies renouvelables intermittentes et les problématiques des centrales nucléaires.
+    🎯 **Enjeu stratégique :** Éviter les coupures d’électricité, surtout avec l’essor des énergies renouvelables intermittentes et les problématiques des centrales nucléaires.
 
     👥 **Compétences mobilisées :** Le projet s’appuie sur une équipe de 4 personnes avec des rôles et responsabilités sur certaines visualisations ou modèles.
 
@@ -147,7 +147,7 @@ La matrice de corrélation montre que les différentes sources de production d'�
 Nous avons sélectionné les variables suivantes pour la prédiction de la consommation énergétique :  
 **Thermique**, **Nucléaire**, **Éolien**, **Solaire**, **Hydraulique**, **Bioénergies**, et **Pompage**.
 
-#### 1. Variables fortement corrélées à la consommation
+#### Variables corrélées à la consommation
 Certaines sources de production montrent une corrélation significative avec la consommation :  
 - Les **bioénergies** (corrélation : **0.59**),  
 - L'**hydraulique** (corrélation : **0.44**),  
@@ -155,15 +155,15 @@ Certaines sources de production montrent une corrélation significative avec la 
 
 Ces variables contribuent directement à expliquer les variations de la consommation.
 
-#### 2. Production nucléaire
+#### Production nucléaire
 La **production nucléaire** est stable mais reste un facteur clé avec une corrélation de **0.21**.
 
-#### 3. Énergies renouvelables et variations saisonnières
+####  Énergies renouvelables et variations saisonnières
 Bien que les énergies renouvelables présentent des corrélations plus faibles, elles capturent efficacement les variations saisonnières :  
 - **Éolien** (corrélation : **0.059**),  
 - **Solaire** (corrélation : **0.04**).
 
-#### 4. Effet du pompage et stockage d'énergie
+####  Effet du pompage et stockage d'énergie
 La variable **Pompage** a une corrélation négative (**-0.19**), ce qui reflète son rôle dans le stockage d'énergie, entraînant un effet inverse sur la consommation.
 
 #### Conclusion
@@ -385,8 +385,20 @@ Ces deux modèles ont obtenu les **meilleurs résultats** lors de nos tests comp
     """, unsafe_allow_html=True)
     st.write("")  # Espace visuel
     st.write("")  # Espace visuel
-    st.markdown("""Pour aller plus loin dans le projet, nous avons utilisé des **modèles de séries temporelles** afin de projeter la consommation énergétique **jusqu'en 2030**.  
-                Cette approche permet d'anticiper les tendances futures à partir des données historiques, en intégrant les effets saisonniers et les évolutions de long terme.
+    st.markdown("""Afin de **dépasser les attentes du projet initial**, nous avons choisi d'aller plus loin en explorant des **modèles de séries temporelles** pour projeter la consommation énergétique **jusqu'en 2030**.
+
+Nous avons d'abord testé des modèles comme **Prophet** et un modèle hybride **Prophet + ARIMA**.  
+S'ils prédisaient avec une grande précision les **données déjà présentes dans le dataset**, ils se sont révélés **peu performants pour anticiper la consommation future**, notamment sur un horizon long terme.
+
+Nous nous sommes donc tournés vers un modèle **XGBoost**, en enrichissant le dataset avec des **variables temporelles ingénierées** :
+- **Mois** et **année**,  
+- **Lags** à 12 et 24 mois,  
+- **Moyennes mobiles** (24 mois et différentiel 24–12),  
+- **Composantes saisonnières** (**sinus** et **cosinus**).
+
+Ce modèle parvient à bien capturer les **pics saisonniers récurrents**, mais **échoue à refléter les tendances de fond sur le long terme** : il projette une consommation **quasi linéaire**, sans tenir compte d'une probable **hausse structurelle de la demande énergétique**, ce qui est irréaliste dans le contexte français actuel.
+
+Il n’est donc **pas encore prêt pour une mise en production**, car il nécessiterait l’ajout de **variables exogènes** (telles que des données météo, économiques ou réglementaires) pour mieux expliquer l’évolution de la consommation et **améliorer le R²**.
                             """)
     st.write("")  # Espace visuel
     st.write("")  # Espace visuel
