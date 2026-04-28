@@ -117,7 +117,7 @@ elif page == pages[2]:
         # Comparaison production vs consommation
         st.write("## Production vs Consommation")
         comparaison = df[["Date - Heure", "Production_Totale", "Consommation (MW)"]].set_index("Date - Heure")
-        comparaison_annuelle = comparaison.resample("Y").mean()
+        comparaison_annuelle = comparaison.resample("YE").mean()
 
         fig, ax = plt.subplots(figsize=(10, 5))
         comparaison_annuelle.plot(kind="bar", ax=ax, color=["blue", "orange"])
